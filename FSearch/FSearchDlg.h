@@ -38,7 +38,8 @@ public:
 	afx_msg void OnEnChangePojam();
 	afx_msg void OnLbnSelchangeList1();
 	CListBox list;
-	CEdit FileName;
+	//CEdit FileName;
 	CComboBox drive;
 	afx_msg void OnCbnSelchangeCombo1();
+	CString text;
 };

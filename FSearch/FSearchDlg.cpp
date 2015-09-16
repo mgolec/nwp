@@ -51,7 +51,10 @@ END_MESSAGE_MAP()
 
 CFSearchDlg::CFSearchDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CFSearchDlg::IDD, pParent)
+	, text(_T(""))
 {
+	
+
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
@@ -60,8 +63,9 @@ void CFSearchDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 
 	DDX_Control(pDX, IDC_LIST1, list);
-	DDX_Control(pDX, IDC_POJAM, FileName);
+	//DDX_Control(pDX, IDC_POJAM, FileName);
 	DDX_Control(pDX, IDC_COMBO1, drive);
+	DDX_Text(pDX, IDC_POJAM, text);
 }
 
 BEGIN_MESSAGE_MAP(CFSearchDlg, CDialogEx)
@@ -164,26 +168,23 @@ HCURSOR CFSearchDlg::OnQueryDragIcon()
 
 void CFSearchDlg::OnBnClickedSearch()
 {
-	//CEdit* editBox = (CEdit*)GetDlgItem(IDC_POJAM);
-	//CString str;
-	//editBox->GetWindowTextW(str);
+	UpdateData(TRUE);
 
-	//CListBox* listBox = (CListBox*)GetDlgItem(IDC_POJAM);
-	///*if (listBox->FindStringExact(0, str) == LB_ERR)
-	//listBox->AddString(str);*/
+	list.ResetContent();
 
-	/*list.TrimLeft('*');
-	list.TrimLeft();
-	list.TrimRight();
-	list.MakeLower();
+	text.TrimLeft('*');
+	text.TrimLeft();
+	text.TrimRight();
+	text.MakeLower();
 
-	list.TrimLeft('*');
+	text.TrimLeft('*');
 
-	if (list.IsEmpty())
+	if (text.IsEmpty())
 	{
 		MessageBox("Enter the File Name to Search");
 		return;
-	}*/
+	}
+	
 }
 
 

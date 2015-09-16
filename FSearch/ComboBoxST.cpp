@@ -91,8 +91,8 @@ void CComboBoxST::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
       &rect,
       DT_LEFT|DT_SINGLELINE|DT_VCENTER);
 
-   if (bold)
-		dc.SelectObject(oldFont);
+   /*if (bold)
+	   dc.SelectObject(oldFont);*/
    boldFont.DeleteObject();
    // Reset the background color and the text color back to their
    // original values.
@@ -104,18 +104,3 @@ void CComboBoxST::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 }
 
 
-void CComboBoxST::SetIcon(int iItem, int iconId)
-{
-	HICON hIcon = (HICON)::LoadImage(AfxGetInstanceHandle(),
-	MAKEINTRESOURCE(iconId),IMAGE_ICON,16,16,0);
-	
-	STHICON iData;
-	if (myMap.Lookup(iItem,iData))
-		iData.m_hIcon = hIcon;
-	else
-	{
-		iData.m_hIcon = hIcon;
-	}
-	myMap.SetAt(iItem,iData);
-	Invalidate();
-}

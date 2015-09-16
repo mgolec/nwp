@@ -34,7 +34,7 @@ public:
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CListBoxEx)
-	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	//afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnOpen();
 	afx_msg void OnDelete();
 	//}}AFX_MSG
