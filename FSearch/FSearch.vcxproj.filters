@@ -33,12 +33,6 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ListBoxEx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ComboBoxST.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FSearch.cpp">
@@ -48,12 +42,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ListBoxEx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ComboBoxST.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

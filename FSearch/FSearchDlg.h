@@ -5,8 +5,6 @@
 #pragma once
 #include "afxwin.h"
 
-#include "ListBoxEx.h"
-#include "ComboBoxST.h"
 
 #define BUFSIZE 512
 
@@ -33,7 +31,7 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg void OnTimer(UINT nIDEvent);
+	
 
 	DECLARE_MESSAGE_MAP()
 private: 

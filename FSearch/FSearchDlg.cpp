@@ -67,7 +67,6 @@ void CFSearchDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 
 	DDX_Control(pDX, IDC_LIST1, list);
-	//DDX_Control(pDX, IDC_POJAM, FileName);
 	DDX_Control(pDX, IDC_COMBO1, drive);
 	DDX_Text(pDX, IDC_POJAM, text);
 }
@@ -134,6 +133,7 @@ BOOL CFSearchDlg::OnInitDialog()
 //kraj
 
 
+	//neuspjeli pokušaj sa ikonama, možda napravim ako stignem
 
 	//TCHAR szTemp[MAX_PATH] = { '\0' };
 	////int nCount = -1;
@@ -246,12 +246,7 @@ void CFSearchDlg::OnBnClickedSearch()
 	CString strName;
 	drive.GetLBText(nIndex, strName);
 
-	if (0 == strName.CompareNoCase(_T("My Computer")))
-		SetTimer(1001, 100, NULL);
-	else
-	{
-		SetTimer(1002, 10, NULL);
-		CStatic* pWndStc = (CStatic*)GetDlgItem(IDC_REPORT);
+	CStatic* pWndStc = (CStatic*)GetDlgItem(IDC_REPORT);
 		if (pWndStc)
 		{
 			pWndStc->SetWindowText(_T("Please wait..Searching in ") + strName + _T("Drive ......."));
@@ -272,7 +267,7 @@ void CFSearchDlg::OnBnClickedSearch()
 				strCount.Format(_T("%d matches found."), nCount);
 
 			pWndStc->SetWindowText(_T("Searching Completed.") + strCount);
-		}
+		
 
 	}
 }
@@ -327,64 +322,6 @@ void CFSearchDlg::SearchFile(CString strPath)
 			}
 		}
 	}
-}
-
-void CFSearchDlg::OnTimer(UINT nIDEvent)
-{
-	if (1001 == nIDEvent)
-	{
-		CString strDriveName((""));
-		KillTimer(1001);
-		SetTimer(1002, 10, NULL);
-		CStatic* pWndStc = (CStatic*)GetDlgItem(IDC_REPORT);
-		
-		CString strDrive((""));
-		TCHAR szTemp[MAX_PATH] = { '\0' };
-		if (GetLogicalDriveStrings(BUFSIZE - 1, szTemp))
-		{
-			TCHAR szDrive[3] = TEXT(" :");
-			BOOL bFound = FALSE;
-			TCHAR* p = szTemp;
-
-			do
-			{
-
-				*szDrive = *p;
-				strDrive = szDrive;
-				while (*p++);
-				strDriveName.Format(_T("Please wait..Searching in %s Drive ......."), strDrive);
-				pWndStc->SetWindowText(strDriveName);
-				SearchFile(strDrive);
-
-			} while (!bFound && *p);
-		}
-		KillTimer(1002);
-		
-		if (pWndStc)
-		{
-			int nCount = list.GetCount();
-			CString strCount;
-
-			if (1 == nCount)
-				strCount.Format(_T("%d match found."), nCount);
-			else if (0 == nCount)
-				strCount.Format(_T("No matches found."));
-			else
-				strCount.Format(_T("%d matches found."), nCount);
-
-			pWndStc->SetWindowText(_T("Searching Completed.") + strCount);
-		}
-	}
-
-	if (1002 == nIDEvent)
-	{
-		if (100 == Count)
-		{
-			Count = 0;
-		}
-	}
-
-	CDialog::OnTimer(nIDEvent);
 }
 
 void CFSearchDlg::OnEnChangePojam()
