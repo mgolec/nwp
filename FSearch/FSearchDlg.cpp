@@ -6,6 +6,9 @@
 #include "FSearch.h"
 #include "FSearchDlg.h"
 #include "afxdialogex.h"
+#include "tchar.h"
+#include "cstringt.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -50,11 +53,12 @@ END_MESSAGE_MAP()
 
 
 CFSearchDlg::CFSearchDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(CFSearchDlg::IDD, pParent)
-	, text(_T(""))
+: CDialogEx(CFSearchDlg::IDD, pParent)
+, text(_T(""))
+	
 {
 	
-
+	Count = 0;
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
@@ -111,6 +115,56 @@ BOOL CFSearchDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+	//pretraga driveova	
+	DWORD dwSize = MAX_PATH;
+	char szLogicalDrives[MAX_PATH] = { 0 };
+	DWORD dwResult = GetLogicalDriveStringsW(dwSize, (LPWSTR)szLogicalDrives);
+
+	if (dwResult > 0 && dwResult < MAX_PATH)
+	{
+		char* szSingleDrive = szLogicalDrives;
+		while (*szSingleDrive)
+		{
+			drive.AddString(LPCTSTR(szSingleDrive));
+
+		//	 get the next drive
+			szSingleDrive += 8;
+		}
+	}
+//kraj
+
+
+
+	//TCHAR szTemp[MAX_PATH] = { '\0' };
+	////int nCount = -1;
+	//TCHAR szBuffer[1024];
+	////char szBuffer[MAX_PATH] = { 0 };
+	//GetLogicalDriveStrings(1024, szBuffer);
+	//TCHAR *pch = szBuffer;
+	//while (*pch)
+	
+		//++nCount;
+
+	//if (DRIVE_FIXED == GetDriveType(pch))
+	//	drive.SetIcon(nCount, IDI_ICON1);
+	//	else if (DRIVE_REMOTE == GetDriveType(pch))
+	//		drive.SetIcon(nCount, IDI_ICON2);
+	//	else if (DRIVE_CDROM == GetDriveType(pch))
+	//		drive.SetIcon(nCount, IDI_ICON4);
+	//	else
+	//		drive.SetIcon(nCount, IDI_ICON5);
+	//
+	//	CString strDrive = pch;
+	//	strDrive.TrimRight('\\');
+	//	strDrive.TrimLeft();
+	//	strDrive.TrimRight();
+	//	drive.AddString(strDrive);
+	//	//pch = &pch[strlen(pch) + 1];
+	//}
+	//drive.SetIcon(NULL, IDI_ICON3);
+	//drive.AddString(_T("My Computer"));
+	//drive.SetCurSel(0);
+
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -181,12 +235,157 @@ void CFSearchDlg::OnBnClickedSearch()
 
 	if (text.IsEmpty())
 	{
-		MessageBox("Enter the File Name to Search");
+		//MessageBox("Enter the File Name to Search");
+		MessageBox(_T("Enter the File Name to Search"), _T("Error"), MB_ICONERROR | MB_OK);
+		
 		return;
 	}
-	
+
+
+	int nIndex = drive.GetCurSel();
+	CString strName;
+	drive.GetLBText(nIndex, strName);
+
+	if (0 == strName.CompareNoCase(_T("My Computer")))
+		SetTimer(1001, 100, NULL);
+	else
+	{
+		SetTimer(1002, 10, NULL);
+		CStatic* pWndStc = (CStatic*)GetDlgItem(IDC_REPORT);
+		if (pWndStc)
+		{
+			pWndStc->SetWindowText(_T("Please wait..Searching in ") + strName + _T("Drive ......."));
+
+		}
+		SearchFile(strName);
+		CString strCount("");
+		if (pWndStc)
+		{
+			int nCount = list.GetCount();
+			CString strCount;
+
+			if (1 == nCount)
+				strCount.Format(_T("%d match found."), nCount);
+			else if (0 == nCount)
+				strCount.Format(_T("No matches found."));
+			else
+				strCount.Format(_T("%d matches found."), nCount);
+
+			pWndStc->SetWindowText(_T("Searching Completed.") + strCount);
+		}
+
+	}
 }
 
+void CFSearchDlg::SearchFile(CString strPath)
+{
+	CFileFind oFileFind;
+	strPath += "\\*.*";
+
+	BOOL bSucess = oFileFind.FindFile(strPath);
+
+	MSG Msg = { 0 };
+	while (bSucess)
+	{
+
+		while (PeekMessage(&Msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&Msg);
+			DispatchMessage(&Msg);
+		}
+		bSucess = oFileFind.FindNextFile();
+
+		if (oFileFind.IsDots())
+			continue;
+
+		else if (oFileFind.IsDirectory())
+		{
+			CString strName = oFileFind.GetFileName();
+
+			strName.TrimLeft();
+			strName.TrimRight();
+			strName.MakeLower();
+
+			if (-1 != strName.Find(text))
+			{
+				list.AddString(oFileFind.GetFilePath());
+			}
+
+			SearchFile(oFileFind.GetFilePath());
+		}
+
+		else
+		{
+			CString strName = oFileFind.GetFileName();
+			strName.TrimLeft();
+			strName.TrimRight();
+			strName.MakeLower();
+
+			if (-1 != strName.Find(text))
+			{
+				list.AddString(oFileFind.GetFilePath());
+			}
+		}
+	}
+}
+
+void CFSearchDlg::OnTimer(UINT nIDEvent)
+{
+	if (1001 == nIDEvent)
+	{
+		CString strDriveName((""));
+		KillTimer(1001);
+		SetTimer(1002, 10, NULL);
+		CStatic* pWndStc = (CStatic*)GetDlgItem(IDC_REPORT);
+		
+		CString strDrive((""));
+		TCHAR szTemp[MAX_PATH] = { '\0' };
+		if (GetLogicalDriveStrings(BUFSIZE - 1, szTemp))
+		{
+			TCHAR szDrive[3] = TEXT(" :");
+			BOOL bFound = FALSE;
+			TCHAR* p = szTemp;
+
+			do
+			{
+
+				*szDrive = *p;
+				strDrive = szDrive;
+				while (*p++);
+				strDriveName.Format(_T("Please wait..Searching in %s Drive ......."), strDrive);
+				pWndStc->SetWindowText(strDriveName);
+				SearchFile(strDrive);
+
+			} while (!bFound && *p);
+		}
+		KillTimer(1002);
+		
+		if (pWndStc)
+		{
+			int nCount = list.GetCount();
+			CString strCount;
+
+			if (1 == nCount)
+				strCount.Format(_T("%d match found."), nCount);
+			else if (0 == nCount)
+				strCount.Format(_T("No matches found."));
+			else
+				strCount.Format(_T("%d matches found."), nCount);
+
+			pWndStc->SetWindowText(_T("Searching Completed.") + strCount);
+		}
+	}
+
+	if (1002 == nIDEvent)
+	{
+		if (100 == Count)
+		{
+			Count = 0;
+		}
+	}
+
+	CDialog::OnTimer(nIDEvent);
+}
 
 void CFSearchDlg::OnEnChangePojam()
 {
