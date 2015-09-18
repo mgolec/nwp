@@ -122,13 +122,6 @@
     <None Include="res\FSearch.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\..\Desktop\Capital18-Ethereal-Drives-Network-Online.ico" />
-    <Image Include="..\..\..\..\..\Desktop\drive_harddisk.ico" />
-    <Image Include="..\..\..\..\..\Desktop\drive_remote.ico" />
-    <Image Include="..\..\..\..\..\Desktop\Icons-Land-Vista-Hardware-Devices-Computer.ico" />
-    <Image Include="..\..\..\..\..\Desktop\Seanau-Flat-App-Questionmark.ico" />
-    <Image Include="..\..\..\..\..\Desktop\Thvg-Slick-Drives-Windows-HD-Drive.ico" />
-    <Image Include="..\..\..\..\..\Desktop\Uribaani-Realm-CD-Drive.ico" />
     <Image Include="res\FSearch.ico" />
     <Image Include="res\icon1.ico" />
   </ItemGroup>

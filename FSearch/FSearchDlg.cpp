@@ -80,6 +80,7 @@ BEGIN_MESSAGE_MAP(CFSearchDlg, CDialogEx)
 	ON_LBN_SELCHANGE(IDC_LIST1, &CFSearchDlg::OnLbnSelchangeList1)
 	ON_CBN_SELCHANGE(IDC_COMBO1, &CFSearchDlg::OnCbnSelchangeCombo1)
 	ON_LBN_DBLCLK(IDC_LIST1, &CFSearchDlg::DoubleClickOnRez)
+	ON_BN_CLICKED(IDC_OPEN, &CFSearchDlg::OnBnClickedOpen)
 END_MESSAGE_MAP()
 
 
@@ -136,37 +137,7 @@ BOOL CFSearchDlg::OnInitDialog()
 //kraj
 
 
-	//neuspjeli pokušaj sa ikonama, možda napravim ako stignem  (edit: nemam pojma kak to rješit)
-
-	//TCHAR szTemp[MAX_PATH] = { '\0' };
-	////int nCount = -1;
-	//TCHAR szBuffer[1024];
-	////char szBuffer[MAX_PATH] = { 0 };
-	//GetLogicalDriveStrings(1024, szBuffer);
-	//TCHAR *pch = szBuffer;
-	//while (*pch)
 	
-		//++nCount;
-
-	//if (DRIVE_FIXED == GetDriveType(pch))
-	//	drive.SetIcon(nCount, IDI_ICON1);
-	//	else if (DRIVE_REMOTE == GetDriveType(pch))
-	//		drive.SetIcon(nCount, IDI_ICON2);
-	//	else if (DRIVE_CDROM == GetDriveType(pch))
-	//		drive.SetIcon(nCount, IDI_ICON4);
-	//	else
-	//		drive.SetIcon(nCount, IDI_ICON5);
-	//
-	//	CString strDrive = pch;
-	//	strDrive.TrimRight('\\');
-	//	strDrive.TrimLeft();
-	//	strDrive.TrimRight();
-	//	drive.AddString(strDrive);
-	//	//pch = &pch[strlen(pch) + 1];
-	//}
-	//drive.SetIcon(NULL, IDI_ICON3);
-	//drive.AddString(_T("My Computer"));
-	//drive.SetCurSel(0);
 
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -341,6 +312,8 @@ void CFSearchDlg::OnEnChangePojam()
 void CFSearchDlg::OnLbnSelchangeList1()
 {
 	// TODO: Add your control notification handler code here
+
+	
 }
 
 
@@ -352,7 +325,7 @@ void CFSearchDlg::OnCbnSelchangeCombo1()
 
 void CFSearchDlg::DoubleClickOnRez()
 {
-	// Message box sa putanjom
+	// message box sa putanjom
 	int nIndex = list.GetCurSel();
 	CString strName;
 	list.GetText(nIndex, strName);
@@ -360,3 +333,17 @@ void CFSearchDlg::DoubleClickOnRez()
 	
 }
 
+
+
+void CFSearchDlg::OnBnClickedOpen()
+{
+	// otvaranje u defaultnom programu
+	int nIndex = list.GetCurSel();
+	CString strName;
+	if (nIndex != LB_ERR){
+		list.GetText(nIndex, strName);
+		ShellExecute(NULL, _T("open"), _T("explorer.exe"), strName, NULL, SW_SHOWDEFAULT);
+	}
+	else
+		MessageBox(_T("Select valid line in list you want to open"));
+}

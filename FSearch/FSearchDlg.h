@@ -48,4 +48,5 @@ public:
 	afx_msg void OnCbnSelchangeCombo1();
 	CString text;
 	afx_msg void DoubleClickOnRez();
+	afx_msg void OnBnClickedOpen();
 };
