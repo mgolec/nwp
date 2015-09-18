@@ -47,4 +47,5 @@ public:
 	CComboBox drive;
 	afx_msg void OnCbnSelchangeCombo1();
 	CString text;
+	afx_msg void DoubleClickOnRez();
 };

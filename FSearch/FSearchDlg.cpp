@@ -79,6 +79,7 @@ BEGIN_MESSAGE_MAP(CFSearchDlg, CDialogEx)
 	ON_EN_CHANGE(IDC_POJAM, &CFSearchDlg::OnEnChangePojam)
 	ON_LBN_SELCHANGE(IDC_LIST1, &CFSearchDlg::OnLbnSelchangeList1)
 	ON_CBN_SELCHANGE(IDC_COMBO1, &CFSearchDlg::OnCbnSelchangeCombo1)
+	ON_LBN_DBLCLK(IDC_LIST1, &CFSearchDlg::DoubleClickOnRez)
 END_MESSAGE_MAP()
 
 
@@ -114,17 +115,19 @@ BOOL CFSearchDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+
 	//pretraga driveova	
 	DWORD dwSize = MAX_PATH;
 	char szLogicalDrives[MAX_PATH] = { 0 };
 	DWORD dwResult = GetLogicalDriveStringsW(dwSize, (LPWSTR)szLogicalDrives);
-
+	
 	if (dwResult > 0 && dwResult < MAX_PATH)
 	{
 		char* szSingleDrive = szLogicalDrives;
 		while (*szSingleDrive)
 		{
 			drive.AddString(LPCTSTR(szSingleDrive));
+			drive.SetIcon(NULL, TRUE);
 
 		//	 get the next drive
 			szSingleDrive += 8;
@@ -133,7 +136,7 @@ BOOL CFSearchDlg::OnInitDialog()
 //kraj
 
 
-	//neuspjeli pokušaj sa ikonama, možda napravim ako stignem
+	//neuspjeli pokušaj sa ikonama, možda napravim ako stignem  (edit: nemam pojma kak to rješit)
 
 	//TCHAR szTemp[MAX_PATH] = { '\0' };
 	////int nCount = -1;
@@ -345,3 +348,15 @@ void CFSearchDlg::OnCbnSelchangeCombo1()
 {
 	// TODO: Add your control notification handler code here
 }
+
+
+void CFSearchDlg::DoubleClickOnRez()
+{
+	// Message box sa putanjom
+	int nIndex = list.GetCurSel();
+	CString strName;
+	list.GetText(nIndex, strName);
+	MessageBox(strName);
+	
+}
+
