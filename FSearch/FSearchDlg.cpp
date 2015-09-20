@@ -223,9 +223,13 @@ void CFSearchDlg::OnBnClickedSearch()
 	CStatic* pWndStc = (CStatic*)GetDlgItem(IDC_REPORT);
 		if (pWndStc)
 		{
-			pWndStc->SetWindowText(_T("Please wait..Searching in ") + strName + _T("Drive ......."));
+			pWndStc->SetWindowText(_T("Please wait..Searching in ") + strName + _T(" Drive ......."));
 
 		}
+
+		CWnd *button = GetDlgItem(IDC_SEARCH);
+		button->EnableWindow(FALSE);
+
 		SearchFile(strName);
 		CString strCount("");
 		if (pWndStc)
@@ -241,7 +245,8 @@ void CFSearchDlg::OnBnClickedSearch()
 				strCount.Format(_T("%d matches found."), nCount);
 
 			pWndStc->SetWindowText(_T("Searching Completed.") + strCount);
-		
+			
+			button->EnableWindow(TRUE);
 
 	}
 }
@@ -252,6 +257,8 @@ void CFSearchDlg::SearchFile(CString strPath)
 	strPath += "\\*.*";
 
 	BOOL bSucess = oFileFind.FindFile(strPath);
+	
+	//Button_Enable((BOOL*)GetDlgItem(NULL,IDC_SEARCH), TRUE);
 
 	MSG Msg = { 0 };
 	while (bSucess)

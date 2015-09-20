@@ -4,6 +4,7 @@
 
 #pragma once
 #include "afxwin.h"
+#include "Windowsx.h"
 
 
 #define BUFSIZE 512
