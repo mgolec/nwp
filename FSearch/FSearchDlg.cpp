@@ -206,11 +206,14 @@ void CFSearchDlg::OnBnClickedSearch()
 	text.MakeLower();
 
 	text.TrimLeft('*');
+	CString temp, temp2;
 
 	if (text.IsEmpty())
 	{
 		//MessageBox("Enter the File Name to Search");
-		MessageBox(_T("Enter the File Name to Search"), _T("Error"), MB_ICONERROR | MB_OK);
+		temp.LoadString(IDS_ENTER_FILE);
+		temp2.LoadString(IDS_ERROR);
+		MessageBox(temp, temp2, MB_ICONERROR | MB_OK);
 		
 		return;
 	}
@@ -223,7 +226,9 @@ void CFSearchDlg::OnBnClickedSearch()
 	CStatic* pWndStc = (CStatic*)GetDlgItem(IDC_REPORT);
 		if (pWndStc)
 		{
-			pWndStc->SetWindowText(_T("Please wait..Searching in ") + strName + _T(" Drive ......."));
+			temp.LoadString(IDS_SEARCHING);
+			temp2.LoadString(IDS_DRIVE);
+			pWndStc->SetWindowText(temp + strName + temp2);
 
 		}
 
@@ -238,13 +243,23 @@ void CFSearchDlg::OnBnClickedSearch()
 			CString strCount;
 
 			if (1 == nCount)
-				strCount.Format(_T("%d match found."), nCount);
+			{
+				temp.LoadString(IDS_FOUND);
+				strCount.Format(temp, nCount);
+			}
 			else if (0 == nCount)
-				strCount.Format(_T("No matches found."));
+			{
+				temp.LoadString(IDS_NO_MATCHES);
+				strCount.Format(temp);
+			}
 			else
-				strCount.Format(_T("%d matches found."), nCount);
+			{
+				temp.LoadString(IDS_MATCHES);
+				strCount.Format(temp, nCount);
+			}
 
-			pWndStc->SetWindowText(_T("Searching Completed.") + strCount);
+			temp.LoadString(IDS_COMPLETE);
+			pWndStc->SetWindowText(temp + strCount);
 			
 			button->EnableWindow(TRUE);
 
@@ -352,5 +367,10 @@ void CFSearchDlg::OnBnClickedOpen()
 		ShellExecute(NULL, _T("open"), _T("explorer.exe"), strName, NULL, SW_SHOWDEFAULT);
 	}
 	else
-		MessageBox(_T("Select valid line in list you want to open"));
-}
+	{
+
+		CString temp;
+		temp.LoadString(IDS_VALID);
+			MessageBox(temp);
+	}
+	}
